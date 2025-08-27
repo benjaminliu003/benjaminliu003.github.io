@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benjamin Liu - Computer Engineering Student</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            /* DARK — Midnight Purple palette */
+            --bg: #0b1020;              /* deep night */
+            --bg-2: #170b2a;            /* midnight purple */
+            --fg: #e6e6f0;              /* light text */
+            --muted: #b1b3c7;           /* secondary text */
+            --brand: #8b5cf6;           /* violet */
+            --brand-2: #22d3ee;         /* aqua accent */
+            --card: rgba(255,255,255,0.06);
+            --ring: rgba(139, 92, 246, 0.45);
+            --grad-a: rgba(82, 24, 138, 0.28);
+            --grad-b: rgba(33, 9, 69, 0.30);
+            --lava-hue-min: 220; --lava-hue-max: 260; --lava-sat: 85; --lava-light: 60;
+            --accent-on: #00131a;
+            --shadow: rgba(0,0,0,0.35);
+            --sun: #fde68a;
+            --moon: #c7d2fe;
+            --toggle-bg: rgba(255,255,255,0.08);
+        }
+
+        [data-theme='light'] {
+            /* LIGHT — Tropical Sunrise palette */
+            --bg: #fff8f1;              /* warm sand */
+            --bg-2: #fff0e1;            /* sunrise haze */
+            --fg: #1f2937;              /* dark text */
+            --muted: #4b5563;           /* secondary text */
+            --brand: #fb923c;           /* tangerine */
+            --brand-2: #f472b6;         /* hibiscus pink */
+            --card: rgba(15, 23, 42, 0.06);
+            --ring: rgba(251, 146, 60, 0.45);
+            --grad-a: rgba(244,114,182,0.25);
+            --grad-b: rgba(251,146,60,0.22);
+            --lava-hue-min: 10; --lava-hue-max: 20; --lava-sat: 95; --lava-light: 55;
+            --accent-on: #1b1107;
+            --shadow: rgba(0,0,0,0.15);
+            --sun: #eab308;
+            --moon: #6366f1;
+            --toggle-bg: rgba(0,0,0,0.06);
+        }
+
+        html {
+            /* Initial scroll snap setting */
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(1200px 900px at 80% -10%, var(--grad-b), transparent),
+                radial-gradient(900px 700px at -10% 20%, var(--grad-a), transparent),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+            color: var(--fg);
+            transition: background 1s ease, color 1s ease;
+        }
+
+        section {
+            /* All sections are potential snap points */
+            scroll-snap-align: start;
+        }
+
+        #lava {
+            position: fixed; inset: 0; z-index: -1; width: 100vw; height: 100vh;
+            display: block; opacity: 0.6; filter: blur(20px) saturate(115%);
+            transition: opacity 1s ease, filter 1.2s ease;
+        }
+        
+        .glass-effect {
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .accent-color { color: var(--brand-2); }
+        .text-muted { color: var(--muted); }
+
+        .btn-primary {
+            background: linear-gradient(180deg, var(--brand), var(--brand-2));
+            color: var(--accent-on);
+            box-shadow: 0 12px 40px var(--ring), inset 0 0 0 1px rgba(255,255,255,0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 50px var(--ring), inset 0 0 0 1px rgba(255,255,255,0.6);
+        }
+
+        .section-title {
+            border-bottom: 2px solid var(--brand);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .theme-toggle {
+            position: fixed; 
+            bottom: 14px; 
+            left: 14px; 
+            z-index: 100;
+            appearance: none; border: none; background: var(--toggle-bg);
+            color: var(--fg); box-shadow: 0 10px 24px var(--shadow);
+            border-radius: 999px; padding: .6rem; cursor: pointer;
+            display: grid; place-items: center;
+            transition: background 1s ease, transform .1s ease;
+        }
+        .theme-toggle:hover { transform: translateY(-1px); }
+        .theme-toggle .icon { width: 22px; height: 22px; display: inline-block; }
+
+        /* Timeline Styles */
+        .timeline-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 2rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--brand) transparent;
+        }
+        .timeline-container::-webkit-scrollbar {
+            height: 5px;
+        }
+        .timeline-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .timeline-container::-webkit-scrollbar-thumb {
+            background-color: var(--brand);
+            border-radius: 10px;
+        }
+        .timeline-item {
+            position: relative;
+            min-width: 320px;
+            padding: 1.5rem;
+            padding-left: 3rem;
+            border-left: 2px solid var(--brand);
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -9px; /* Adjust to center on the line */
+            top: 1.5rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--brand-2);
+            border: 2px solid var(--bg);
+        }
+
+        /* Startup Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Start hidden */
+            animation-fill-mode: forwards; /* Stay at the end state */
+        }
+
+        #logo-link, #nav-links a, #hero-title, #hero-subtitle, #hero-socials {
+            opacity: 0; /* Ensure elements start hidden before animation */
+        }
+
+        #logo-link {
+            animation: fadeInDown 0.6s ease-out 0.2s forwards;
+        }
+        #nav-links a:nth-child(1) { animation: fadeInDown 0.6s ease-out 0.4s forwards; }
+        #nav-links a:nth-child(2) { animation: fadeInDown 0.6s ease-out 0.5s forwards; }
+        #nav-links a:nth-child(3) { animation: fadeInDown 0.6s ease-out 0.6s forwards; }
+        #nav-links a:nth-child(4) { animation: fadeInDown 0.6s ease-out 0.7s forwards; }
+        #nav-links a:nth-child(5) { animation: fadeInDown 0.6s ease-out 0.8s forwards; }
+        #hero-title {
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
+        }
+        #hero-subtitle {
+            animation: fadeInUp 0.8s ease-out 1.0s forwards;
+        }
+        #hero-socials {
+            animation: fadeInUp 0.8s ease-out 1.2s forwards;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Lava lamp background -->
+    <canvas id="lava" aria-hidden="true"></canvas>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
+        <span class="icon" aria-hidden="true"></span>
+    </button>
+
+    <!-- Header & Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#hero" id="logo-link" class="text-2xl font-bold tracking-wider">
+                BL<span class="accent-color">.</span>
+            </a>
+            <nav id="nav-links" class="hidden md:flex space-x-8">
+                <a href="#about" class="hover:text-[var(--brand-2)] transition-colors duration-150">About</a>
+                <a href="#experience" class="hover:text-[var(--brand-2)] transition-colors duration-150">Experience</a>
+                <a href="#projects" class="hover:text-[var(--brand-2)] transition-colors duration-150">Projects</a>
+                <a href="#skills" class="hover:text-[var(--brand-2)] transition-colors duration-150">Skills</a>
+                <a href="#resume" class="hover:text-[var(--brand-2)] transition-colors duration-150">Resume</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--brand)]">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 glass-effect">
+            <a href="#about" class="block py-2 hover:text-[var(--brand-2)]">About</a>
+            <a href="#experience" class="block py-2 hover:text-[var(--brand-2)]">Experience</a>
+            <a href="#projects" class="block py-2 hover:text-[var(--brand-2)]">Projects</a>
+            <a href="#skills" class="block py-2 hover:text-[var(--brand-2)]">Skills</a>
+            <a href="#resume" class="block py-2 hover:text-[var(--brand-2)]">Resume</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center pt-24">
+            <div class="container mx-auto px-6 text-center">
+                <h1 id="hero-title" class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">
+                    Hi, I'm Benjamin Liu<span class="accent-color">.</span>
+                </h1>
+                <p id="hero-subtitle" class="text-xl md:text-2xl text-muted mb-8">
+                    I Like Cheese :)
+                    <!-- A Computer Engineering Student at the University of Waterloo. -->
+                </p>
+                <div id="hero-socials" class="flex justify-center space-x-6">
+                    <!-- Social links from resume -->
+                    <a href="https://github.com/benjaminliu003" target="_blank" class="text-muted hover:text-[var(--brand)] transition-colors duration-300" aria-label="GitHub">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/bliu0326/" target="_blank" class="text-muted hover:text-[var(--brand)] transition-colors duration-300" aria-label="LinkedIn">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                     <a href="mailto:b328liu@uwaterloo.ca" class="text-muted hover:text-[var(--brand)] transition-colors duration-300" aria-label="Email">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 flex items-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">About Me</h2>
+                <div class="max-w-3xl mx-auto text-center text-muted leading-relaxed">
+                    <p class="mb-4">
+                        I am a Computer Engineering student at the University of Waterloo with a passion for tackling complex challenges in both software and hardware. My experience ranges from re-engineering automated test stacks at Ciena to developing anti-money laundering systems at NN Life Japan. I thrive on creating efficient, automated solutions that deliver significant impact.
+                    </p>
+                    <p>
+                        Beyond my internships, I lead power systems design on the WATonomous design team and founded a cloud computing venture to support scientific simulations. I'm always eager to apply my skills to new and meaningful projects.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Work Experience Section -->
+        <section id="experience" class="py-20 flex items-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">Work Experience</h2>
+                <div class="timeline-container">
+                    <!-- Timeline Item 1 -->
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold mb-1">Optical Component Test Engineering Intern</h3>
+                        <p class="text-muted font-semibold mb-2">Ciena Canada ULC | Jan 2025 - Present</p>
+                        <p class="text-muted">Re-engineered an automated RF/DC test stack, created a TDR toolkit, and migrated laser production to a new hardware stack, dramatically increasing product yield.</p>
+                    </div>
+                    <!-- Timeline Item 2 -->
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold mb-1">Quantitative and Technical Analyst</h3>
+                        <p class="text-muted font-semibold mb-2">NN Life Japan Ltd. | Sep 2023 - May 2024</p>
+                        <p class="text-muted">Developed Azure Pipelines, a new Anti-Money Laundering Automation System in Python, and prototyped an internal data research tool using React.</p>
+                    </div>
+                    <!-- Timeline Item 3 -->
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold mb-1">Enterprise Information Governance Specialist</h3>
+                        <p class="text-muted font-semibold mb-2">Ontario Lottery & Gaming Corporation | Jan 2023 - May 2023</p>
+                        <p class="text-muted">Prototyped an automated data management system using Python and OpenAI's API, saving 10-15 hours per week of manual data entry.</p>
+                    </div>
+                    <!-- Timeline Item 4 -->
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold mb-1">Corporate Real Estate Analyst</h3>
+                        <p class="text-muted font-semibold mb-2">Bank of Montreal | Jun 2022 - Sep 2022</p>
+                        <p class="text-muted">Commissioned a new datacenter wing, automated logging with VBA, and designed a multiplatform work order app using the Power Platform.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section (Design Teams) -->
+        <section id="projects" class="py-20 flex items-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">Design Teams & Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Project Card 1 -->
+                    <div class="glass-effect rounded-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-2">WATonomous - Power Systems Lead</h3>
+                        <p class="text-muted mb-4">Designing a new LV/HV AC & DC power supply system for automotive self-navigation electronics and the main compute module, including physical emergency shutoffs and remote override systems.</p>
+                    </div>
+
+                    <!-- Project Card 2 -->
+                    <div class="glass-effect rounded-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-2">Engineers Without Borders - WATurbine Power Lead</h3>
+                        <p class="text-muted mb-4">Developing a DC power generation system for a small-scale wind turbine intended for deployment in Africa, including engineering a cost-efficient, custom-designed DC brushed motor.</p>
+                    </div>
+                    
+                    <!-- Project Card 3 -->
+                    <div class="glass-effect rounded-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-2">Founder - Ben's Cloud Computing</h3>
+                        <p class="text-muted mb-4">Acquired seed funding and provided computing resources for scientific simulations. Configured remote licensing and set up FEM/FDTD photonics simulations using Optiwave and Lumerical.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        
+        <!-- Skills Section -->
+        <section id="skills" class="py-20 flex items-center">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">Technical Skills</h2>
+                <div class="max-w-4xl mx-auto">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--brand-2)]">Languages</h3>
+                        <p class="text-muted">C/C++, MATLAB, Python, SQL, Microsoft VBA, ARM Assembly (Thumb2), Javascript, HTML & CSS</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--brand-2)]">Frameworks</h3>
+                        <p class="text-muted">React, Express, SQL Server</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-3 text-[var(--brand-2)]">Developer Tools</h3>
+                        <p class="text-muted">Git, Docker, Google Cloud Platform, VS Code, Visual Studio, PyCharm, IntelliJ, Microsoft Power Platform & Office, Azure DevOps</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resume Section -->
+        <section id="resume" class="py-20 flex items-center">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold section-title mb-6">My Resume</h2>
+                <p class="max-w-2xl mx-auto text-muted mb-8">
+                    For a more detailed look at my background, please download my full resume.
+                </p>
+                <a href="Benjamin_Liu_Resume.pdf" download class="btn-primary font-bold py-3 px-8 rounded-full inline-block">
+                    Download Resume
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 bg-transparent">
+        <div class="container mx-auto px-6 text-center text-muted/50">
+            <p>&copy; 2024 Benjamin Liu. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Mobile Menu Toggle ---
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Smooth scrolling for navigation links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // --- THEME TOGGLE ---
+        ;(function themeToggle(){
+            const root = document.documentElement;
+            const btn = document.getElementById('themeToggle');
+            if (!btn) return;
+            const iconSpan = btn.querySelector('.icon');
+            const KEY = 'site-theme';
+            function isLight() { return root.getAttribute('data-theme') === 'light'; }
+            function iconSVG(theme){
+                return theme === 'light'
+                    ? `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="22" height="22"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 1 0 9.8 9.8z" fill="var(--moon)"/></svg>`
+                    : `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="22" height="22"><circle cx="12" cy="12" r="5" fill="var(--sun)"/><g stroke="var(--sun)" stroke-width="2" stroke-linecap="round"><path d="M12 2v2"/><path d="M12 20v2"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M4.2 4.2l1.4 1.4"/><path d="M18.4 18.4l1.4 1.4"/><path d="M19.8 4.2l-1.4 1.4"/><path d="M4.2 19.8l1.4-1.4"/></g></svg>`;
+            }
+            function apply(theme){
+                root.setAttribute('data-theme', theme);
+                if (iconSpan) iconSpan.innerHTML = iconSVG(theme);
+                localStorage.setItem(KEY, theme);
+                btn.title = (theme==='light' ? 'Switch to night' : 'Switch to day');
+                document.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+            }
+            const stored = localStorage.getItem(KEY);
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            apply(stored || (prefersLight ? 'light' : 'dark'));
+            btn.addEventListener('click', () => apply(isLight() ? 'dark' : 'light'));
+        })();
+
+        // --- LAVA LAMP BACKGROUND ---
+        ;(function lavaLamp(){
+            const canvas = document.getElementById('lava');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+            let W = 0, H = 0, raf = 0, running = true;
+
+            function resize(){
+                W = Math.max(1, innerWidth); H = Math.max(1, innerHeight);
+                canvas.width = Math.floor(W * DPR);
+                canvas.height = Math.floor(H * DPR);
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+            }
+            resize(); addEventListener('resize', resize);
+
+            let HMIN=220, HMAX=260, SAT=85, LIT=60;
+            function readVars(){
+                const cs = getComputedStyle(document.documentElement);
+                HMIN = parseFloat(cs.getPropertyValue('--lava-hue-min')) || 0;
+                HMAX = parseFloat(cs.getPropertyValue('--lava-hue-max')) || HMIN;
+                SAT  = parseFloat(cs.getPropertyValue('--lava-sat')) || 85;
+                LIT  = parseFloat(cs.getPropertyValue('--lava-light')) || 60;
+            }
+            readVars();
+
+            const balls = Array.from({ length: 8 }, () => ({
+                x: Math.random(), y: Math.random(),
+                r: 90 + Math.random() * 120,
+                vx: (Math.random() * 0.08 + 0.02) * (Math.random() < 0.5 ? -1 : 1),
+                vy: (Math.random() * 0.06 + 0.02) * (Math.random() < 0.5 ? -1 : 1),
+                hue: 0
+            }));
+            function reseed(){ for (const b of balls) b.hue = HMIN + Math.random() * (HMAX - HMIN); }
+            reseed();
+
+            let last = performance.now();
+            function step(now){
+                if (!running) return;
+                const dt = Math.min(0.033, (now - last)/1000);
+                last = now;
+                ctx.clearRect(0,0,W,H);
+                ctx.globalCompositeOperation = 'lighter';
+                
+                const isLightTheme = document.documentElement.getAttribute('data-theme') === 'light';
+
+                for (const b of balls){
+                    b.x += b.vx * dt; b.y += b.vy * dt;
+                    if (b.x < -0.1 || b.x > 1.1) b.vx *= -1;
+                    if (b.y < -0.1 || b.y > 1.1) b.vy *= -1;
+                    const cx = b.x * W, cy = b.y * H;
+                    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, b.r);
+
+                    if (isLightTheme) {
+                        // Use a simpler, softer gradient for light mode to avoid greyish edges.
+                        grad.addColorStop(0, `hsla(${b.hue.toFixed(1)}, ${SAT}%, ${LIT}%, 0.8)`);
+                        grad.addColorStop(1, `hsla(${b.hue.toFixed(1)}, ${SAT}%, ${LIT}%, 0)`);
+                    } else {
+                        // Original gradient for dark mode with the inner shadow effect.
+                        grad.addColorStop(0, `hsla(${b.hue.toFixed(1)}, ${SAT}%, ${LIT}%, 0.9)`);
+                        grad.addColorStop(0.35, `hsla(${(b.hue + 10).toFixed(1)}, ${SAT}%, ${Math.max(0, Math.min(100, LIT - 5))}%, 0.75)`);
+                        grad.addColorStop(1, 'hsla(0, 0%, 0%, 0)');
+                    }
+                    
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, b.r, 0, Math.PI*2);
+                    ctx.fill();
+                }
+                ctx.globalCompositeOperation = 'source-over';
+                raf = requestAnimationFrame(step);
+            }
+            
+            const mq = matchMedia('(prefers-reduced-motion: reduce)');
+            function setMotion(){ 
+                if (mq.matches) { 
+                    running=false; 
+                    cancelAnimationFrame(raf); 
+                    ctx.clearRect(0,0,W,H); 
+                } else if (!running) { 
+                    running=true; 
+                    last=performance.now(); 
+                    raf=requestAnimationFrame(step);
+                } 
+            }
+            mq.addEventListener('change', setMotion);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) { running = false; cancelAnimationFrame(raf); }
+                else if (!mq.matches) { running = true; last = performance.now(); raf = requestAnimationFrame(step); }
+            });
+
+            document.addEventListener('themechange', () => {
+                readVars();
+                reseed();
+            });
+
+            if (!mq.matches) raf = requestAnimationFrame(step);
+        })();
+
+        // --- Selective Scroll Snap ---
+        ;(function selectiveScrollSnap() {
+            const htmlEl = document.documentElement;
+            // This function toggles scroll-snap based on the scroll position.
+            const toggleSnap = () => {
+                // If the user has scrolled past the top section (e.g., more than 200px),
+                // disable scroll snapping to allow for free scrolling.
+                if (window.scrollY > 200) {
+                    htmlEl.style.scrollSnapType = 'none';
+                } else {
+                    // Otherwise, when near the top, ensure scroll snapping is active.
+                    htmlEl.style.scrollSnapType = 'y mandatory';
+                }
+            };
+            // Listen for scroll events to apply the logic dynamically.
+            window.addEventListener('scroll', toggleSnap, { passive: true });
+            // Run the check once on load as well.
+            toggleSnap();
+        })();
+    </script>
+
+</body>
+</html>
