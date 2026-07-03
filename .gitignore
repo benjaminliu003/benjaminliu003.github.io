@@ -1,1 +1,51 @@
+# --- Dependencies & build output ---
 node_modules/
+.next/
+out/
+.velite/
+public/og/
+coverage/
+playwright-report/
+test-results/
+Roadmap/logs/
+
+# --- Local tool state (not project source) ---
+.claude/settings.local.json
+.superpowers/
+*.log
+
+# --- Archived experiments (kept local-only) ---
+Personal Site Testing Grounds - ARCHIVED/
+
+# --- PCB fabrication data: NEVER COMMIT ---
+# Raw Gerber/drill/BOM/CAD files are full fabrication data for a real board;
+# publishing them would let anyone manufacture it. Only derived SVG/raster
+# renders under public/pcb/ may ever ship. See AGENTS.md security invariants.
+PCB/
+*.PcbDoc
+*.SchDoc
+*.PrjPcb
+*.PcbLib
+*.SchLib
+*.Cam
+*.DRR
+*.EXTREP
+*.APR_LIB
+*.apr
+*.LDP
+*.REP
+*.cvg
+*.GTL
+*.GBL
+*.GTS
+*.GBS
+*.GTO
+*.GBO
+*.GTP
+*.GBP
+*.G[0-9]
+*.GP[0-9]
+*.GM
+*.GM[0-9]
+*.GM[0-9][0-9]
+*.TX[0-9]
