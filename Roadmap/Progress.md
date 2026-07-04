@@ -56,8 +56,8 @@ months; the rename redirect note also means: remote URL updated locally.
 1. **Ben**: Vercel OAuth-link the repo (framework Next.js, build `pnpm
    build`, output `out`) + set production branch to a dummy name → preview
    URL appears on the rebuild PR. `vercel.json` already enforces noindex.
-2. Verify CI green on the PR (`.github/workflows/ci.yml`; LHCI ≥0.95 may
-   need placeholder-page tuning — first run tells).
+2. ~~Verify CI green on the PR~~ DONE before handoff: PR #1 `quality` checks
+   SUCCESS on both triggers, incl. LHCI ≥0.95 all categories.
 3. Then **M2 per Roadmap**: spike `pcb-stackup@4.2.8` on the real Gerbers at
    `PCB\Project Outputs for ELI_Frisbee_Mk.I\` — first question: negative-
    polarity planes GP1/GP2 (`TF.FilePolarity,Negative`), outline from
