@@ -9,7 +9,7 @@ Session log: `Roadmap/Progress.md`. Conventions: `AGENTS.md`.
 | Milestone | Owner | Status |
 |---|---|---|
 | M0 Hygiene, docs, guardrails | Claude inline | **done 2026-07-03** |
-| M1 Scaffold + toolchain + CI | Codex (plan: `Roadmap/plans/M1-scaffold.md`) | pending |
+| M1 Scaffold + toolchain + CI | Claude inline (Codex hung; see Progress 2026-07-04) | **done 2026-07-04** (CI + Vercel link pending) |
 | M2 Gerber pipeline | Claude spike → Codex hardening | pending |
 | M3 Content, IA, SEO/ATS + tokens | Codex plumbing + Claude tokens | pending |
 | M4 Blog + RSS + OG | Codex | pending |

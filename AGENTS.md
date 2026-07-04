@@ -75,10 +75,15 @@ delegated.
 
 - Handoff = a written plan file in `Roadmap/plans/M{n}-{slug}.md` (context,
   invariants, exact files, complete code, acceptance commands, out-of-scope).
-- Pinned invocation (run from repo root; capture full JSON stream):
+- Pinned invocation (run from repo root; capture full JSON stream). Two
+  hard-won gotchas: `--full-auto` is deprecated (use `--sandbox
+  workspace-write`), and `codex exec` blocks forever "Reading additional
+  input from stdin..." when launched detached with an open-but-empty stdin —
+  always pipe stdin closed. Never switch git branches in the working tree
+  while a delegated run is active (shared tree).
 
-  ```
-  codex exec --full-auto -c model="gpt-5.5" -c model_reasoning_effort="xhigh" --json "Read AGENTS.md and Roadmap/plans/<file>. Implement it exactly. Iterate until pnpm lint && pnpm typecheck && pnpm test && pnpm build all pass." > Roadmap/logs/M{n}.jsonl
+  ```powershell
+  $null | codex exec --sandbox workspace-write -c model="gpt-5.5" -c model_reasoning_effort="xhigh" --json "Read AGENTS.md and Roadmap/plans/<file>. Implement it exactly. Iterate until pnpm lint && pnpm typecheck && pnpm test && pnpm build all pass." > Roadmap/logs/M{n}.jsonl
   ```
 
 - The run of record is the JSONL log (`Roadmap/logs/`, gitignored). Reviewer
