@@ -46,16 +46,76 @@ Directly reinforces the site's food-humor thread ("I Like Cheese :)"). The
 pcb-stackup top composite is a ready-made hero/OG "money shot" (green mask,
 ENIG-gold pads, full silk designators). Feed this into M3 content + M6 design.
 
-### Next: HOLD to plan M2 hardening
+### Decisions (asked Ben; he was AFK — proceeded on defaults, cheap-to-reverse)
 
-Spike de-risked M2; next is the full `scripts/pcb/build-pcb.mts` pipeline +
-manifest + `verify-no-gerbers.mts` guard + budgets + golden tests. Decisions to
-settle when planning: exact plane-composite treatment, delegate-to-Codex vs
-inline (Codex hung in M1 — leaning inline for the taste-bearing compositing,
-Codex-delegable for the guard/budget scripts), and whether to fold the
-"money shot" into M2 outputs now. Version pins to add to the project (not just
-scratchpad): pcb-stackup@4.2.8, gerber-to-svg@4.2.8, whats-that-gerber@4.2.7,
-@resvg/resvg-js, svgo, sharp — as devDependencies (local-only pipeline).
+Asked two questions at the hold; no response in 60s. Proceeded because M2's
+technical pipeline is **framing-independent** and doesn't block on either:
+1. **Board-identity framing** (lean-in vs balanced vs professional): DEFERRED
+   to M3 visual checkpoint (a), which was always a Ben-gate. M2 renders the
+   same geometry regardless; the "money shot" composite is built framing-
+   neutral (labels/copy come in M3). Re-ask at M3.
+2. **M2 builder**: building **inline on Opus** — Codex hung in M1, and the
+   plane-compositing is taste-bearing. Documented fallback; most reliable.
+   Building inline (not delegating) → no heavy plan-file needed, per the
+   pattern Fable set (plan-files are for delegation handoffs). Structured via
+   the task list instead.
+
+### M2 build — architecture locked (from spike evidence)
+
+- **Ship as SVG** (outer, visible on any physical board): GTL, GBL copper;
+  GTS/GBS mask; GTO/GBO silk; GM outline. **Ship as raster only** (inner =
+  fab secret + perf): G1, GP1, G2, G3, GP2, G4. Paste (GTP/GBP) excluded.
+- **Alignment**: gerber coords are absolute board microns shared across all
+  files; only each layer's computed bbox/viewBox differs. So render per-layer
+  then FORCE a common viewBox (union, = pcb-stackup's) → perfect overlay.
+- **Negative planes**: copper-fill rect masked by the clearance artwork,
+  clipped to the board outline, rasterized. Verify visually with resvg.
+- **Money shot**: pcb-stackup top/bottom composite → SVG + raster for hero/OG.
+- Deps added to project as devDependencies (local-only pipeline; never in CI).
+
+### M2 BUILT & verified (Claude inline)
+
+Pipeline shipped and all gates green locally (lint, typecheck, 12 unit tests,
+build, `pnpm pcb:verify`, `pnpm check:budgets`). Files:
+- `scripts/pcb/`: `layers.mts` (allowlist + render policy), `build-pcb.mts`
+  (render → reframe → SVGO / raster-composite → manifest), `manifest-schema.mts`
+  (zod, build-time only), `fab-detect.ts` (+ `.test.ts`), `verify-no-gerbers.mts`
+  (CI guard), `check-budgets.mts`.
+- `lib/pcb.ts` (typed manifest accessor, zod-free bundle) + `lib/pcb.test.ts`
+  (manifest integrity, runs in CI without Gerbers).
+- `lib/generated/pcb-manifest.json` + `public/pcb/*` (13 layer assets + 2
+  board composites + exploded-static) — COMMITTED derivatives.
+- `pnpm pcb:build|pcb:verify|check:budgets` scripts; guard + budgets wired into
+  `ci.yml`.
+
+Verified: **negative planes render correctly** (solid copper disc with
+transparent anti-pad holes — the M2 flagged risk, confirmed by eye); layer
+alignment correct (disc-from-outline + holes-from-GP1 overlay perfectly, so the
+common-viewBox reframe works across layers); **build is deterministic**
+(public/pcb + manifest byte-identical across two runs); budgets 443/450 KB;
+guard red-teamed (planted `.GTL` + innocent-named fab file → exit 1; clean → 0).
+
+Deviations from plan (cheap-to-reverse, recorded): (1) WebP-only, no AVIF twin
+for v1 (budgets met; halves committed bytes/build time; AVIF marginal here —
+add in M7 if needed); (2) money shot shipped as raster not vector (pcb-stackup
+emits random ids → non-deterministic SVG; raster pixels are stable); (3) masks
+shipped as simple SVG openings, not the green-sheet composite (that polish is
+M6); (4) inner-raster width 1000px, board-bottom 640px to hit the 450 KB total.
+
+**CRITICAL bug caught before commit**: M0's `.gitignore` rule `PCB/` (no
+leading slash, and git ignore is case-insensitive on Windows) was silently
+ignoring `scripts/pcb/` AND `public/pcb/` — committing would have omitted the
+whole pipeline + assets and broken CI. Fixed to `/PCB/` (root-anchored). Lesson
+for future dirs: anchor repo-root ignores with a leading slash.
+
+### Next (M3): content port + SEO/ATS + provisional tokens; Ben-gated
+
+M3 is the next milestone. It reaches **visual checkpoint (a)** — the first hard
+Ben-gate — where the design-language name/palette AND the deferred board-
+identity framing question (lean-in vs balanced vs professional on "MTL Smoked
+Meat Sandwich") get ratified. Re-ask both at M3. The money-shot raster
+(`public/pcb/board-top.webp`) and `lib/pcb.ts` are ready for the hero/animation
+(M5) and for M3 to reference.
 
 ---
 
