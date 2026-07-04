@@ -1,0 +1,7 @@
+{
+  "trailingSlash": true,
+  "outputDirectory": "out",
+  "headers": [
+    { "source": "/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
+  ]
+}
