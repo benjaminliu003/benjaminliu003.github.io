@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+/* Provisional "Silkscreen" tokens — ratified at visual checkpoint (a), M3 */
+@theme {
+  --color-soldermask: #0d1a14;
+  --color-copper: #b87333;
+  --color-enig: #c9a227;
+  --color-silk: #e8e6df;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+}
