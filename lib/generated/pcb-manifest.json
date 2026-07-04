@@ -1,0 +1,305 @@
+{
+  "board": {
+    "name": "ELI_Frisbee_Mk.I",
+    "title": "MTL Smoked Meat Sandwich",
+    "sourceHash": "2c2adf9800c6a768",
+    "units": "mm"
+  },
+  "viewBox": [
+    30441,
+    8851,
+    139016.01,
+    139016
+  ],
+  "layers": [
+    {
+      "id": "silk-top",
+      "order": 0,
+      "kind": "silk",
+      "side": "top",
+      "label": "Silk · Top",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/silk-top.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 49114,
+        "gzip": 7583
+      }
+    },
+    {
+      "id": "mask-top",
+      "order": 0,
+      "kind": "mask",
+      "side": "top",
+      "label": "Soldermask · Top",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/mask-top.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 35727,
+        "gzip": 7186
+      }
+    },
+    {
+      "id": "l1-copper-top",
+      "order": 1,
+      "kind": "copper",
+      "side": "top",
+      "label": "L1 · Signal (Top)",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/l1-copper-top.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 64159,
+        "gzip": 19565
+      }
+    },
+    {
+      "id": "l2-copper",
+      "order": 2,
+      "kind": "copper",
+      "side": "inner",
+      "label": "L2 · Mid1",
+      "shipAs": "raster",
+      "polarity": "positive",
+      "assets": {
+        "svg": null,
+        "webp": "/pcb/l2-copper.webp",
+        "avif": null,
+        "width": 1000
+      },
+      "bytes": {
+        "raw": 45832,
+        "gzip": 45832
+      }
+    },
+    {
+      "id": "l3-plane-gnd",
+      "order": 3,
+      "kind": "plane",
+      "side": "inner",
+      "label": "L3 · GND Plane",
+      "shipAs": "raster",
+      "polarity": "negative",
+      "assets": {
+        "svg": null,
+        "webp": "/pcb/l3-plane-gnd.webp",
+        "avif": null,
+        "width": 1000
+      },
+      "bytes": {
+        "raw": 38748,
+        "gzip": 38748
+      }
+    },
+    {
+      "id": "l4-copper",
+      "order": 4,
+      "kind": "copper",
+      "side": "inner",
+      "label": "L4 · Core1",
+      "shipAs": "raster",
+      "polarity": "positive",
+      "assets": {
+        "svg": null,
+        "webp": "/pcb/l4-copper.webp",
+        "avif": null,
+        "width": 1000
+      },
+      "bytes": {
+        "raw": 42928,
+        "gzip": 42928
+      }
+    },
+    {
+      "id": "l5-copper",
+      "order": 5,
+      "kind": "copper",
+      "side": "inner",
+      "label": "L5 · Core2",
+      "shipAs": "raster",
+      "polarity": "positive",
+      "assets": {
+        "svg": null,
+        "webp": "/pcb/l5-copper.webp",
+        "avif": null,
+        "width": 1000
+      },
+      "bytes": {
+        "raw": 40512,
+        "gzip": 40512
+      }
+    },
+    {
+      "id": "l6-plane-pwr",
+      "order": 6,
+      "kind": "plane",
+      "side": "inner",
+      "label": "L6 · Power Plane",
+      "shipAs": "raster",
+      "polarity": "negative",
+      "assets": {
+        "svg": null,
+        "webp": "/pcb/l6-plane-pwr.webp",
+        "avif": null,
+        "width": 1000
+      },
+      "bytes": {
+        "raw": 40100,
+        "gzip": 40100
+      }
+    },
+    {
+      "id": "l7-copper",
+      "order": 7,
+      "kind": "copper",
+      "side": "inner",
+      "label": "L7 · Mid2",
+      "shipAs": "raster",
+      "polarity": "positive",
+      "assets": {
+        "svg": null,
+        "webp": "/pcb/l7-copper.webp",
+        "avif": null,
+        "width": 1000
+      },
+      "bytes": {
+        "raw": 47742,
+        "gzip": 47742
+      }
+    },
+    {
+      "id": "l8-copper-bottom",
+      "order": 8,
+      "kind": "copper",
+      "side": "bottom",
+      "label": "L8 · Signal (Bottom)",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/l8-copper-bottom.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 57942,
+        "gzip": 14856
+      }
+    },
+    {
+      "id": "mask-bottom",
+      "order": 0,
+      "kind": "mask",
+      "side": "bottom",
+      "label": "Soldermask · Bottom",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/mask-bottom.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 39856,
+        "gzip": 6241
+      }
+    },
+    {
+      "id": "silk-bottom",
+      "order": 0,
+      "kind": "silk",
+      "side": "bottom",
+      "label": "Silk · Bottom",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/silk-bottom.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 13888,
+        "gzip": 3075
+      }
+    },
+    {
+      "id": "outline",
+      "order": 0,
+      "kind": "outline",
+      "side": "top",
+      "label": "Board Outline",
+      "shipAs": "svg",
+      "polarity": "positive",
+      "assets": {
+        "svg": "/pcb/outline.svg",
+        "webp": null,
+        "avif": null,
+        "width": 0
+      },
+      "bytes": {
+        "raw": 424,
+        "gzip": 249
+      }
+    }
+  ],
+  "drills": [
+    {
+      "id": "drill-through",
+      "type": "through",
+      "label": "Plated through-holes",
+      "count": 307,
+      "asset": null
+    },
+    {
+      "id": "drill-uvia-t",
+      "type": "microvia",
+      "label": "Microvias · Top→Mid1",
+      "count": 34,
+      "asset": null
+    },
+    {
+      "id": "drill-uvia-b",
+      "type": "microvia",
+      "label": "Microvias · buried",
+      "count": 52,
+      "asset": null
+    },
+    {
+      "id": "drill-npth",
+      "type": "nonplated",
+      "label": "Non-plated holes",
+      "count": 6,
+      "asset": null
+    },
+    {
+      "id": "drill-slots",
+      "type": "slot",
+      "label": "Plated slots",
+      "count": 4,
+      "asset": null
+    }
+  ],
+  "composites": {
+    "top": "/pcb/board-top.webp",
+    "bottom": "/pcb/board-bottom.webp",
+    "explodedStatic": "/pcb/exploded-static.svg"
+  }
+}
