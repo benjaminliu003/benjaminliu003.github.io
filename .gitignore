@@ -23,7 +23,10 @@ Personal Site Testing Grounds - ARCHIVED/
 # Raw Gerber/drill/BOM/CAD files are full fabrication data for a real board;
 # publishing them would let anyone manufacture it. Only derived SVG/raster
 # renders under public/pcb/ may ever ship. See AGENTS.md security invariants.
-PCB/
+# Anchored to repo root (leading slash) so it ignores ONLY the top-level Altium
+# project, NOT scripts/pcb/ or public/pcb/ (git ignore is case-insensitive on
+# Windows, so a bare `PCB/` would swallow every `pcb/` dir).
+/PCB/
 *.PcbDoc
 *.SchDoc
 *.PrjPcb
