@@ -5,6 +5,60 @@ or model — can resume cold. Conventions: `AGENTS.md`.
 
 ---
 
+## 2026-07-04 (cont.) — M2 spike: tracespace v4 GO (Claude Code / Opus 4.8)
+
+Spike ran in the session scratchpad (nothing committed to the repo tree yet —
+raw Gerbers stay out of git per the security invariant). Rendered all 18 real
+layer/drill files of ELI_Frisbee_Mk.I with pcb-stackup/gerber-to-svg/
+whats-that-gerber v4 and rasterized key layers with @resvg/resvg-js.
+
+### Answers to the spike's open questions
+
+1. **tracespace v4 = GO.** Every layer + drill rendered, zero errors, pure JS,
+   fast. No need for the gerbonara/tracespace-v5 fallbacks. Pin the trio;
+   whats-that-gerber is **4.2.7** (4.2.6 in the plan was a typo — nonexistent).
+2. **Negative planes confirmed inverted, fix proven.** GP1/GP2 carry Altium's
+   `TF.FilePolarity,Negative` *metadata attribute* but NO `%IPNEG%`/`%LPC%` in
+   the body, so gerber-to-svg draws the clearances/anti-pads as positive shapes
+   → visual render is scattered dots on an empty field (the inverse of a
+   plane). Verified visually (PNG). Fix: composite plane = board-profile fill
+   MINUS clearance artwork via SVG `<mask>`, then rasterize. Since inner layers
+   (orders 2–7, incl. both planes) ship **raster-only** per the security
+   invariant, the composite is baked to WebP/AVIF — no clever mask ships. Not a
+   blocker.
+3. **`Take2.GM` = the outline/profile** (0.3 KB gz, clean board boundary).
+   whats-that-gerber can't type GM or the microvia drills (TX3/TX4) — expected;
+   the pipeline uses an explicit allowlist + DRR parse, not auto-detection.
+4. **Sizes: every individual layer is within the 45 KB-gz budget even before
+   SVGO** (largest GTO 23 KB gz, GTL 21.5 KB gz). pcb-stackup composite
+   board-top 54 KB gz / bottom 30 KB gz (one-off hero/OG assets, SVGO + the
+   450 KB total budget absorb it). All layers share alignment via pcb-stackup;
+   raw gerber-to-svg per-layer viewBoxes differ → force a common viewBox from
+   GM (or reuse pcb-stackup's) in the hardening build.
+5. **@resvg/resvg-js rasterizes cleanly** — raster-tier dependency validated.
+
+### Bonus discovery (content/personality)
+
+The board's real silkscreen title is **"MTL Smoked Meat Sandwich, Rev 0.0.1 ·
+By Ben Liu · Feb '26"** — a compact audio board (I2S/PDM mics, speakers,
+Bluetooth, USB-C ESD, OSD32MP1) Ben named after a Montreal deli sandwich.
+Directly reinforces the site's food-humor thread ("I Like Cheese :)"). The
+pcb-stackup top composite is a ready-made hero/OG "money shot" (green mask,
+ENIG-gold pads, full silk designators). Feed this into M3 content + M6 design.
+
+### Next: HOLD to plan M2 hardening
+
+Spike de-risked M2; next is the full `scripts/pcb/build-pcb.mts` pipeline +
+manifest + `verify-no-gerbers.mts` guard + budgets + golden tests. Decisions to
+settle when planning: exact plane-composite treatment, delegate-to-Codex vs
+inline (Codex hung in M1 — leaning inline for the taste-bearing compositing,
+Codex-delegable for the guard/budget scripts), and whether to fold the
+"money shot" into M2 outputs now. Version pins to add to the project (not just
+scratchpad): pcb-stackup@4.2.8, gerber-to-svg@4.2.8, whats-that-gerber@4.2.7,
+@resvg/resvg-js, svgo, sharp — as devDependencies (local-only pipeline).
+
+---
+
 ## 2026-07-04 — M1 done inline; Pages deploy wedge fixed; HANDOFF → Opus 4.8
 
 ### State right now (cold-resume summary)
