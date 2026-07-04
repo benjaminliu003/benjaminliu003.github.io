@@ -12,6 +12,9 @@
     "typecheck": "velite && tsc --noEmit",
     "test": "vitest run",
     "e2e": "playwright test",
+    "pcb:build": "tsx scripts/pcb/build-pcb.mts",
+    "pcb:verify": "tsx scripts/pcb/verify-no-gerbers.mts",
+    "check:budgets": "tsx scripts/pcb/check-budgets.mts",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -22,16 +25,24 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/postcss": "^4.3.2",
     "@types/node": "^26.1.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.10",
+    "gerber-to-svg": "4.2.8",
+    "pcb-stackup": "4.2.8",
     "prettier": "^3.9.4",
     "serve": "^14.2.6",
+    "sharp": "^0.35.3",
+    "svgo": "^4.0.1",
     "tailwindcss": "^4.3.2",
+    "tsx": "^4.23.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "whats-that-gerber": "4.2.7",
+    "zod": "^4.4.3"
   }
 }

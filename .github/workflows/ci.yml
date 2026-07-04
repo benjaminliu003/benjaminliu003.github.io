@@ -21,6 +21,8 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - run: test -f out/index.html && test -f out/rss.xml
+      - run: pnpm pcb:verify # SECURITY: no raw fab data tracked or in out/
+      - run: pnpm check:budgets # PCB asset budgets
       - run: pnpm exec playwright install chromium --with-deps
       - run: pnpm e2e
       - run: pnpm dlx @lhci/cli autorun
