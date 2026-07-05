@@ -11,6 +11,7 @@ Roadmap/logs/
 
 tsconfig.tsbuildinfo
 .playwright-mcp/
+.lighthouseci/
 /m3-*.png
 
 # --- Local tool state (not project source) ---
