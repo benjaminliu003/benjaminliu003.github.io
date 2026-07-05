@@ -10,6 +10,8 @@ test-results/
 Roadmap/logs/
 
 tsconfig.tsbuildinfo
+.playwright-mcp/
+/m3-*.png
 
 # --- Local tool state (not project source) ---
 .claude/settings.local.json

@@ -8,6 +8,31 @@ test('home renders name and all section landmarks', async ({ page }) => {
   }
 })
 
+test('home exposes real content without JS: resume link, board image, revisions', async ({
+  page,
+}) => {
+  await page.goto('/')
+  // Resume download at the unchanged, deep-linkable path.
+  await expect(page.locator('a[href="/Benjamin_Liu_Resume.pdf"]').first()).toBeAttached()
+  // Board money-shot has descriptive alt text (a11y + ATS).
+  await expect(page.locator('img[alt*="MTL Smoked Meat Sandwich"]')).toBeAttached()
+  // Experience revision table carries the four roles.
+  await expect(page.getByText('Optical Component Test Engineering Intern')).toBeAttached()
+  await expect(page.getByText('Corporate Real Estate Analyst')).toBeAttached()
+})
+
+test('theme toggle switches material and persists', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === 'no-js', 'the toggle requires JavaScript')
+  await page.goto('/')
+  const html = page.locator('html')
+  const initial = await html.getAttribute('data-theme')
+  await page.getByRole('button', { name: /switch material/i }).first().click()
+  const toggled = await html.getAttribute('data-theme')
+  expect(toggled).not.toBe(initial)
+  await page.reload()
+  await expect(html).toHaveAttribute('data-theme', toggled!) // localStorage persisted
+})
+
 test('blog index links to the fixture post and the post renders MDX body', async ({ page }) => {
   await page.goto('/blog/')
   await page.getByRole('link', { name: /hello, world/i }).click()

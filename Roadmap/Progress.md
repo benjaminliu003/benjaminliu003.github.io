@@ -108,7 +108,51 @@ ignoring `scripts/pcb/` AND `public/pcb/` — committing would have omitted the
 whole pipeline + assets and broken CI. Fixed to `/PCB/` (root-anchored). Lesson
 for future dirs: anchor repo-root ignores with a leading slash.
 
-### Next (M3): content port + SEO/ATS + provisional tokens; Ben-gated
+## 2026-07-05 — M3 in progress: content + Silkscreen design language (Opus 4.8)
+
+- **Ben ratified board-identity framing: LEAN IN** — the board is celebrated as
+  the "MTL Smoked Meat Sandwich" (real 8-layer HDI audio board underneath);
+  food-humor thread with "I Like Cheese :)" becomes a signature.
+- **Vercel connected by Ben** (main→Production, other branches→Preview). Works
+  as-is because vercel.json noindexes ALL Vercel deploys → Pages stays
+  canonical. No preview on PR yet (integration added after last push); next
+  rebuild push produces one. "OAuth link" = adding the project; already done.
+- **Design language locked (frontend-design skill):** the page presents as
+  Ben's fabrication drawing. Palette: Soldermask dark / Engineering-pad light
+  (deliberately NOT the AI-default cream). Type: all-mono — Space Mono (display)
+  + IBM Plex Mono (body), self-hosted via next/font. Structure-as-information:
+  title-block hero + real board render; Experience = revision-history table
+  (rev D→A = 4 roles); Projects = design blocks U1–U4 (U1 = the board);
+  Skills = bill of materials; Resume = datasheet; footer = DRC report.
+- M3 = provisional language + all real content (ported verbatim from
+  index.html) + SEO/favicon/resume plumbing → **visual checkpoint (a)**. Full
+  polish is M6. Content facts preserved verbatim; only framing/structure is new.
+
+### M3 BUILT — awaiting visual checkpoint (a)
+
+Home page rebuilt in the Silkscreen language; all gates green (lint, typecheck,
+10 e2e, build, **LHCI exit 0 = perf/a11y/best-practices/SEO all ≥95** on home
++ blog). Files: `app/{layout,page,not-found}.tsx`, `app/globals.css` (token
+system + primitives), `components/site/{Header,Section,ThemeToggle}.tsx`,
+`lib/seo.ts`, `scripts/generate-favicons.mts` (cheese.png → 27KB icon set),
+resume copied to `public/`. Verified in-browser (Playwright) dark + light +
+mobile 390px.
+
+Decisions/notes:
+- ThemeToggle uses `useSyncExternalStore` + MutationObserver (reads
+  `<html data-theme>` set by the no-flash script; syncs desktop+mobile
+  instances; satisfies the new react-hooks/set-state-in-effect rule).
+- Board hero uses `next/image` (unoptimized under static export) pointed at the
+  committed money-shot `pcb.composites.top` — dogfoods `lib/pcb.ts`.
+- Resume section keeps `id="resume"` (deep-link + e2e) but is LABELLED
+  "Datasheet". Experience is a REVISION HISTORY table; Skills a BILL OF
+  MATERIALS; Projects design blocks U1–U4 (U1 = the board). NPI correction
+  applied to the Ciena entry + About ("optimizing new product introduction").
+- **CHECKPOINT (a) is a hard Ben-gate.** Full design-system polish (hand
+  annotations, dimension-line system, mobile section nav, board-bg theming) is
+  M6 — intentionally not done yet. Awaiting Ben's ratification of palette /
+  type / concept before mass application. Pushing rebuild → Vercel preview URL
+  on PR #1 for live click-through.
 
 M3 is the next milestone. It reaches **visual checkpoint (a)** — the first hard
 Ben-gate — where the design-language name/palette AND the deferred board-
