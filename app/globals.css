@@ -1,10 +1,202 @@
 @import 'tailwindcss';
 
-/* Provisional "Silkscreen" tokens — ratified at visual checkpoint (a), M3 */
+/*
+  "Silkscreen" design language — the page as Ben's fabrication drawing.
+  Two material themes: Soldermask (dark) and Engineering pad (light).
+  All-mono type, true to fab drawings / netlists / EDA tools.
+  Provisional tokens (M3); full system application is M6.
+*/
+
 @theme {
-  --color-soldermask: #0d1a14;
-  --color-copper: #b87333;
-  --color-enig: #c9a227;
-  --color-silk: #e8e6df;
-  --font-mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', monospace;
+  --font-display: var(--font-space-mono), ui-monospace, monospace;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-copper: var(--copper);
+  --color-gold: var(--gold);
+  --color-blueprint: var(--blueprint);
+  --color-pencil: var(--pencil);
+  --color-line: var(--line);
+}
+
+/* Soldermask (dark) — deep FR4 green-black, ENIG gold, copper, off-white silk. */
+:root,
+:root[data-theme='dark'] {
+  --bg: #0a1410;
+  --panel: #0e1a15;
+  --ink: #e8e6df;
+  --muted: #8a9a92;
+  --copper: #c17a3e;
+  --gold: #d4a72c;
+  --blueprint: #74b3d6;
+  --pencil: #e2513b;
+  --line: rgba(232, 240, 235, 0.14);
+  --grid: rgba(232, 240, 235, 0.045);
+  color-scheme: dark;
+}
+
+/* Engineering pad (light) — pale green drafting paper, graphite, blueprint blue. */
+:root[data-theme='light'] {
+  --bg: #e7ebe1;
+  --panel: #eff1e9;
+  --ink: #16211c;
+  --muted: #55625a;
+  --copper: #9a5a24;
+  --gold: #9c6f18;
+  --blueprint: #2f5b8c;
+  --pencil: #c23a26;
+  --line: rgba(20, 40, 30, 0.18);
+  --grid: rgba(20, 40, 30, 0.06);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #e7ebe1;
+    --panel: #eff1e9;
+    --ink: #16211c;
+    --muted: #55625a;
+    --copper: #9a5a24;
+    --gold: #9c6f18;
+    --blueprint: #2f5b8c;
+    --pencil: #c23a26;
+    --line: rgba(20, 40, 30, 0.18);
+    --grid: rgba(20, 40, 30, 0.06);
+    color-scheme: light;
+  }
+}
+
+body {
+  background-color: var(--bg);
+  /* Faint drafting grid — the sheet the drawing sits on. */
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Design primitives (provisional; expanded in M6) --- */
+
+/* Reference-designator eyebrow: "U1 · ABOUT". Structure encodes the metaphor. */
+.designator {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Keepout panel — dashed courtyard border with corner fiducials, not a card. */
+.keepout {
+  position: relative;
+  border: 1px dashed var(--line);
+  background: color-mix(in oklab, var(--panel) 88%, transparent);
+}
+.keepout::before,
+.keepout::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: 1px solid var(--copper);
+}
+.keepout::before {
+  top: -4px;
+  left: -4px;
+}
+.keepout::after {
+  bottom: -4px;
+  right: -4px;
+}
+
+/* Dimension line — thin rule with end ticks and a measured label. */
+.dim-line {
+  position: relative;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+.dim-line::before,
+.dim-line::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  width: 1px;
+  height: 9px;
+  background: var(--line);
+}
+.dim-line::before {
+  left: 0;
+}
+.dim-line::after {
+  right: 0;
+}
+
+/* Red-pencil annotation — the reviewer's hand markup. */
+.annotation {
+  font-family: var(--font-display);
+  color: var(--pencil);
+  transform: rotate(-3deg);
+}
+
+/* Copper trace link underline. */
+.trace-link {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--copper) 60%, transparent);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.trace-link:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+/* Solder-pad CTA. */
+.pad-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  transition: transform 0.12s ease, box-shadow 0.2s ease;
+}
+.pad-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px color-mix(in oklab, var(--gold) 35%, transparent);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--blueprint);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .no-print {
+    display: none !important;
+  }
 }

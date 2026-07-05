@@ -15,6 +15,7 @@
     "pcb:build": "tsx scripts/pcb/build-pcb.mts",
     "pcb:verify": "tsx scripts/pcb/verify-no-gerbers.mts",
     "check:budgets": "tsx scripts/pcb/check-budgets.mts",
+    "favicons": "tsx scripts/generate-favicons.mts",
     "format": "prettier --write ."
   },
   "dependencies": {
