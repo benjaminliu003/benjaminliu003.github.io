@@ -1,6 +1,14 @@
 'use client'
 
-import { motion, useSpring, useTransform, type MotionValue } from 'motion/react'
+import type { RefObject } from 'react'
+import {
+  motion,
+  MotionConfig,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from 'motion/react'
 import { layerAsset, type PcbLayer } from '@/lib/pcb'
 
 const GAP_Z = 44 // px separation between layers along the board normal (tier A)
@@ -67,15 +75,19 @@ function StackupLayer({
 }
 
 export function StackupScene({
-  progress,
+  sectionRef,
   tier,
   layers,
 }: {
-  progress: MotionValue<number>
+  sectionRef: RefObject<HTMLElement | null>
   tier: 'A' | 'B'
   layers: PcbLayer[]
 }) {
   const flat = tier === 'B'
+  const { scrollYProgress: progress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  })
   const spread = useSpring(useTransform(progress, [0.06, 0.5], [0, 1]), {
     stiffness: 90,
     damping: 24,
@@ -86,7 +98,8 @@ export function StackupScene({
   const rotateZ = flat ? 0 : -8
 
   return (
-    <div className="relative grid h-full place-items-center" style={{ perspective: 1500 }}>
+    <MotionConfig reducedMotion="user">
+      <div className="relative grid h-full place-items-center" style={{ perspective: 1500 }}>
       <motion.div
         className="relative aspect-square w-full max-w-[520px]"
         style={{ rotateX, rotateZ, rotateY: flip, transformStyle: 'preserve-3d' }}
@@ -116,6 +129,7 @@ export function StackupScene({
           </li>
         ))}
       </ol>
-    </div>
+      </div>
+    </MotionConfig>
   )
 }

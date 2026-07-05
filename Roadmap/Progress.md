@@ -149,6 +149,13 @@ multiple scroll positions, both themes, desktop + mobile.
   (reduced-motion / no-JS → static `exploded-static.svg` + semantic layer list,
   in SSR HTML). Constant section height across tiers → no CLS.
 - Roadmap: M5 done ahead of M4 (blog) per Ben's focus.
+- **Perf fix (CI caught it):** first M5 push scored 0.94 perf on the throttled
+  CI runner (Motion + 12 layer images loaded at initial home load). Fixed by
+  lazy-mounting: `useInViewOnce` (native IntersectionObserver) + `next/dynamic`
+  so the scene's Motion chunk + images load only when the section nears view;
+  Motion is no longer in the initial bundle. Fallback swapped to the cached hero
+  `board-top.webp` + full layer list (the old exploded-static.svg's nested
+  `<image href>` don't load in `<img>` mode anyway). Animation verified intact.
 - **Checkpoint (b) is a Ben-gate.** This is a strong first pass; deferred polish
   (M6): active-layer highlighting tied to scroll, cleaner back-flip framing,
   reconciling the hero's static board with the stackup, tuning separation. Push

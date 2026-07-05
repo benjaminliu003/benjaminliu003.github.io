@@ -1,20 +1,21 @@
 'use client'
 
-import { useRef } from 'react'
-import { MotionConfig, useScroll } from 'motion/react'
+import dynamic from 'next/dynamic'
 import { pcb, stackup } from '@/lib/pcb'
 import { useStackupTier } from './useStackupTier'
-import { StackupScene } from './StackupScene'
+import { useInViewOnce } from './useInViewOnce'
 
-// Scroll-driven exploded stackup. The section is tall; a sticky inner stage
-// stays pinned while the scroll drives the animation. The static fallback is
-// always in the SSR HTML (no-JS / ATS / reduced-motion); the client scene
-// overlays it on tier A/B. Section height is constant across tiers → no CLS.
+// The scene (and its Motion chunk + 12 layer images) is a separate bundle,
+// mounted only once the section nears the viewport — so the initial home load
+// carries none of it. Keeps LHCI performance ≥95 with the animation present.
+const StackupScene = dynamic(() => import('./StackupScene').then((m) => ({ default: m.StackupScene })), {
+  ssr: false,
+})
+
 export function StackupSection() {
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const [ref, inView] = useInViewOnce<HTMLElement>('400px')
   const tier = useStackupTier()
-  const animated = tier === 'A' || tier === 'B'
+  const showScene = (tier === 'A' || tier === 'B') && inView
 
   return (
     <section id="stackup" ref={ref} className="relative border-t border-line" style={{ height: '320vh' }}>
@@ -29,16 +30,17 @@ export function StackupSection() {
         </div>
 
         <div className="relative min-h-0 flex-1">
-          {/* Accessible static exploded view — in the SSR HTML; hidden once the scene runs. */}
-          <div className={animated ? 'hidden' : 'grid h-full place-items-center px-5'}>
-            <div className="w-full max-w-2xl">
+          {/* Lightweight fallback (SSR / no-JS / reduced-motion / pre-mount): the
+              assembled board — cached from the hero — plus the full layer list. */}
+          <div className={showScene ? 'hidden' : 'grid h-full place-items-center px-5'}>
+            <div className="w-full max-w-md">
               <img
-                src={pcb.composites.explodedStatic}
-                alt={`Exploded view of the ${stackup.length}-layer board stackup.`}
-                className="mx-auto w-full max-w-md"
+                src={pcb.composites.top}
+                alt={`The ${stackup.length}-layer board, assembled — see the layer list below.`}
+                className="mx-auto w-full max-w-[300px] opacity-90"
                 loading="lazy"
               />
-              <ol className="mt-6 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-muted sm:grid-cols-3">
+              <ol className="mt-6 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-muted">
                 {stackup.map((l) => (
                   <li key={l.id}>{l.label}</li>
                 ))}
@@ -46,13 +48,7 @@ export function StackupSection() {
             </div>
           </div>
 
-          {animated ? (
-            <div className="absolute inset-0">
-              <MotionConfig reducedMotion="user">
-                <StackupScene progress={scrollYProgress} tier={tier} layers={stackup} />
-              </MotionConfig>
-            </div>
-          ) : null}
+          {showScene ? <StackupScene sectionRef={ref} tier={tier} layers={stackup} /> : null}
         </div>
       </div>
     </section>
