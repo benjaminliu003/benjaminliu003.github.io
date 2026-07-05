@@ -9,11 +9,11 @@ Session log: `Roadmap/Progress.md`. Conventions: `AGENTS.md`.
 | Milestone | Owner | Status |
 |---|---|---|
 | M0 Hygiene, docs, guardrails | Claude inline | **done 2026-07-03** |
-| M1 Scaffold + toolchain + CI | Codex (plan: `Roadmap/plans/M1-scaffold.md`) | pending |
-| M2 Gerber pipeline | Claude spike → Codex hardening | pending |
-| M3 Content, IA, SEO/ATS + tokens | Codex plumbing + Claude tokens | pending |
+| M1 Scaffold + toolchain + CI | Claude inline (Codex hung; see Progress 2026-07-04) | **done 2026-07-04** (CI + Vercel link pending) |
+| M2 Gerber pipeline | Claude inline (spike + build) | **done 2026-07-04** |
+| M3 Content, IA, SEO/ATS + tokens | Claude inline | **done — checkpoint (a) APPROVED 2026-07-05** |
+| M5 Exploded-stackup animation | Claude inline | **built — awaiting checkpoint (b)** (reordered ahead of M4) |
 | M4 Blog + RSS + OG | Codex | pending |
-| M5 Exploded-stackup animation | Claude inline | pending |
 | M6 Design-system application | Claude inline | pending |
 | M7 Quality-gate hardening | Codex | pending |
 | M8 Cutover + launch | Claude + Ben | pending |
@@ -29,7 +29,8 @@ Session log: `Roadmap/Progress.md`. Conventions: `AGENTS.md`.
 - **Gerber→SVG pipeline** (`pnpm pcb:build`, local-only; committed-derivatives
   model — CI/Vercel never see Gerbers): layer allowlist (8 copper/plane +
   masks + silks + GM profile + drills; paste excluded), pcb-stackup@4.2.8 /
-  gerber-to-svg@4.2.8 / whats-that-gerber@4.2.6 pinned (fallbacks: gerbonara,
+  gerber-to-svg@4.2.8 / whats-that-gerber@**4.2.7** pinned (4.2.6 was a plan
+  typo — does not exist; corrected at the M2 spike) (fallbacks: gerbonara,
   then @tracespace/core v5 alpha); negative planes composed via SVG mask
   (fallback rasters); sanitize + SVGO precision 2; raster tier WebP+AVIF via
   sharp + resvg; inner layers raster-only (security); static exploded

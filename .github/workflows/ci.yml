@@ -1,0 +1,28 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [rebuild]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: test -f out/index.html && test -f out/rss.xml
+      - run: pnpm pcb:verify # SECURITY: no raw fab data tracked or in out/
+      - run: pnpm check:budgets # PCB asset budgets
+      - run: pnpm exec playwright install chromium --with-deps
+      - run: pnpm e2e
+      - run: pnpm dlx @lhci/cli autorun
