@@ -11,9 +11,9 @@ Session log: `Roadmap/Progress.md`. Conventions: `AGENTS.md`.
 | M0 Hygiene, docs, guardrails | Claude inline | **done 2026-07-03** |
 | M1 Scaffold + toolchain + CI | Claude inline (Codex hung; see Progress 2026-07-04) | **done 2026-07-04** (CI + Vercel link pending) |
 | M2 Gerber pipeline | Claude inline (spike + build) | **done 2026-07-04** |
-| M3 Content, IA, SEO/ATS + tokens | Claude inline | **built — awaiting checkpoint (a)** |
+| M3 Content, IA, SEO/ATS + tokens | Claude inline | **done — checkpoint (a) APPROVED 2026-07-05** |
+| M5 Exploded-stackup animation | Claude inline | **built — awaiting checkpoint (b)** (reordered ahead of M4) |
 | M4 Blog + RSS + OG | Codex | pending |
-| M5 Exploded-stackup animation | Claude inline | pending |
 | M6 Design-system application | Claude inline | pending |
 | M7 Quality-gate hardening | Codex | pending |
 | M8 Cutover + launch | Claude + Ben | pending |

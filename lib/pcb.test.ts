@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { pcb, stackupLayers } from './pcb'
+import { pcb, stackup } from './pcb'
 
 // Validates the COMMITTED manifest + derived assets. Runs in CI without any
 // Gerbers present — this is the contract the app relies on.
@@ -22,9 +22,10 @@ describe('committed PCB manifest', () => {
     }
   })
 
-  it('orders stackup layers top -> bottom', () => {
-    const orders = stackupLayers.map((l) => l.order)
-    expect(orders).toEqual([...orders].sort((a, b) => a - b))
+  it('stacks layers top -> bottom, copper L1..L8 in order, outline excluded', () => {
+    expect(stackup.some((l) => l.kind === 'outline')).toBe(false)
+    const copperOrders = stackup.filter((l) => l.order > 0).map((l) => l.order)
+    expect(copperOrders).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
   })
 
   it('references derived assets that exist on disk', () => {

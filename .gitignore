@@ -12,7 +12,7 @@ Roadmap/logs/
 tsconfig.tsbuildinfo
 .playwright-mcp/
 .lighthouseci/
-/m3-*.png
+/m[0-9]-*.png
 
 # --- Local tool state (not project source) ---
 .claude/settings.local.json

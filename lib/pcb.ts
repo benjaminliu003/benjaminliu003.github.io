@@ -37,5 +37,13 @@ export interface PcbManifest {
 
 export const pcb = manifest as PcbManifest
 
-/** Layers ordered top -> bottom of the physical stackup, for the exploded view. */
-export const stackupLayers: PcbLayer[] = [...pcb.layers].sort((a, b) => a.order - b.order)
+/**
+ * Layers in physical top-to-bottom order for the exploded stackup — the
+ * manifest array already preserves that order (silk/mask top → L1..L8 →
+ * mask/silk bottom). The board outline is handled separately.
+ */
+export const stackup: PcbLayer[] = pcb.layers.filter((l) => l.kind !== 'outline')
+export const outline: PcbLayer | null = pcb.layers.find((l) => l.kind === 'outline') ?? null
+
+/** Primary shippable asset for a layer (crisp SVG when available, else raster). */
+export const layerAsset = (l: PcbLayer): string => l.assets.svg ?? l.assets.webp ?? ''

@@ -108,7 +108,53 @@ ignoring `scripts/pcb/` AND `public/pcb/` — committing would have omitted the
 whole pipeline + assets and broken CI. Fixed to `/PCB/` (root-anchored). Lesson
 for future dirs: anchor repo-root ignores with a leading slash.
 
-## 2026-07-05 — M3 in progress: content + Silkscreen design language (Opus 4.8)
+## 2026-07-05 (cont.) — Checkpoint (a) APPROVED; M5 next (Opus 4.8)
+
+- **Ben approved the Silkscreen design language** (checkpoint a). M3 done.
+- **Requirement for M5** (from Ben, reviewing the hero): the animation MUST show
+  **all 8 copper/plane layers AND the back of the PCB**, not just the top-layer
+  silkscreen. The hero's static board-top.webp is a placeholder — Ben read it as
+  the animation. Assets already support this: M2 rendered all 8 layers
+  (orders 1–8) + bottom silk/mask/copper + a board-bottom composite.
+- **Roadmap revised**: M5 (animation) reordered AHEAD of M4 (blog) — it's the
+  centerpiece Ben is focused on, and blog styling is cheaper to do after. Noted
+  per "revise roadmap as evidence arrives."
+- M5 plan: dedicated scroll-driven `StackupSection` (sticky stage, ~350vh),
+  Motion `useScroll`→`useSpring`/`useTransform` per-layer MotionValues (no React
+  state per frame), isometric tilt, tiers A/B/C, SSR static fallback
+  (exploded-static.svg). Timeline: assembled top → explode all 13 layers
+  (8 copper/plane + masks/silks, designator-labelled) → reveal the back
+  (board-bottom). Reaches **checkpoint (b)**.
+
+## 2026-07-05 (cont.) — M5 built: exploded stackup animation (Opus 4.8)
+
+Scroll-driven exploded stackup shipped; all gates green (lint, typecheck, 12
+unit, build, 11 e2e + 1 skip, **LHCI exit 0 = all categories ≥95** WITH the
+animation + 12 layer images — perf held). Verified in-browser (Playwright) at
+multiple scroll positions, both themes, desktop + mobile.
+
+- Files: `components/stackup/{useStackupTier.ts, StackupScene.tsx,
+  StackupSection.tsx}`; `lib/pcb.ts` gains `stackup` (physical order) + `outline`
+  + `layerAsset()`; wired into `app/page.tsx` after the hero; `motion@12.42.2`
+  added; `@next/next/no-img-element` disabled (static export → next/image gives
+  no benefit and its wrapper breaks 3D layers).
+- **Satisfies Ben's requirement**: all 8 copper/plane layers + top/bottom
+  silk/mask render as 12 distinct translucent FR4 wafers (gold-edged), and the
+  scroll rotates the stack (rotateY→180°) to reveal the BACK. Designator rail
+  labels every layer.
+- Architecture: sticky 320vh section; Motion `useScroll`→`useSpring`(spread)
+  + per-layer `useTransform` MotionValues piped to `style` (z on desktop / y on
+  mobile) — zero React state per scroll frame; compositor-only transforms under
+  a static isometric tilt. Tiers A (desktop 3D) / B (mobile flat) / C
+  (reduced-motion / no-JS → static `exploded-static.svg` + semantic layer list,
+  in SSR HTML). Constant section height across tiers → no CLS.
+- Roadmap: M5 done ahead of M4 (blog) per Ben's focus.
+- **Checkpoint (b) is a Ben-gate.** This is a strong first pass; deferred polish
+  (M6): active-layer highlighting tied to scroll, cleaner back-flip framing,
+  reconciling the hero's static board with the stackup, tuning separation. Push
+  → Vercel preview for live scroll-through.
+
+## 2026-07-05 — M3 built: content + Silkscreen design language (Opus 4.8)
 
 - **Ben ratified board-identity framing: LEAN IN** — the board is celebrated as
   the "MTL Smoked Meat Sandwich" (real 8-layer HDI audio board underneath);

@@ -21,6 +21,15 @@ test('home exposes real content without JS: resume link, board image, revisions'
   await expect(page.getByText('Corporate Real Estate Analyst')).toBeAttached()
 })
 
+test('stackup section ships an accessible layer fallback in SSR HTML', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('section#stackup')).toBeAttached()
+  // The static exploded view + layer list are in the SSR HTML (no-JS / ATS).
+  await expect(page.locator('img[alt*="Exploded view"]')).toBeAttached()
+  await expect(page.getByText('L3 · GND Plane').first()).toBeAttached()
+  await expect(page.getByText('L8 · Signal (Bottom)').first()).toBeAttached()
+})
+
 test('theme toggle switches material and persists', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === 'no-js', 'the toggle requires JavaScript')
   await page.goto('/')

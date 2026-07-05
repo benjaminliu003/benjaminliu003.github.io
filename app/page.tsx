@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { Header } from '@/components/site/Header'
 import { Section } from '@/components/site/Section'
+import { StackupSection } from '@/components/stackup/StackupSection'
 import { pcb } from '@/lib/pcb'
 
 const SOCIALS = [
@@ -149,6 +150,9 @@ export default function Home() {
             </figure>
           </div>
         </section>
+
+        {/* Exploded stackup — the scroll-driven centerpiece: all 8 layers + the back. */}
+        <StackupSection />
 
         {/* About — U1, the main controller. */}
         <Section id="about" designator="U1 · Main Controller" title="About" note="1 of 5">
